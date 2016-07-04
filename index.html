@@ -33,28 +33,62 @@
                 Link,
                 auth } = ReactRouter;
 
+        var CollectionDetails = React.createClass ({
+            render: function() {
+                if (this.props.params.id) {
+                    var collectionId = this.props.params.id;
+
+                    function findCollection(collection) {
+                        collectionId = collectionId.substring(3);
+                        return collection.id === collectionId;
+                    }
+
+                    var collectionDetails = collectionData.find(findCollection);
+                }
+                var collectionDetailsDisplay = this.props.params.id ? (
+                        <div>
+                            <p>{collectionDetails.id}</p>
+                            <p>{collectionDetails.name}</p>
+                            <p>{collectionDetails.publishDate}</p>
+                            <p>{collectionDetails.type}</p>
+                        </div>
+                ) : (
+                        <div>
+                        </div>
+                );
+                return (
+                        <div>
+                            {collectionDetailsDisplay}
+                        </div>
+                )
+            }
+        });
+
         var CollectionList = React.createClass ({
             render: function() {
                 var createCollectionRow = function(collections) {
                     return (
-                        <tr key={collections.id}>
-                            <td>{collections.name}</td>
+                        <tr key={collections.id} >
+                            <td><a href={"#/collectionDetails/id:" + collections.id}>{collections.name}</a></td>
                             <td>{collections.publishDate}</td>
                         </tr>
                     );
                 };
                 return (
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Collection name</th>
-                                <th>Collection date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.props.collections.map(createCollectionRow, this)}
-                        </tbody>
-                    </table>
+                    <div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Collection name</th>
+                                    <th>Collection date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.props.collections.map(createCollectionRow, this)}
+                            </tbody>
+                        </table>
+                        <CollectionDetails params={false}/>
+                    </div>
                 );
             }
         });
@@ -164,6 +198,9 @@
                 <Route path="/" component={App}>
                     <IndexRoute component={CollectionsPage}/>
                     <Route path="collections" component={CollectionsPage} />
+                        <IndexRoute component={CollectionsPage}/>
+                        {/* render the message component at /inbox/messages/123 */}
+                        <Route path="collectionDetails/:id" component={CollectionDetails} />
                     <Route path="publishingQueue" component={PublishingQueuePage} />
                     <Route path="reports" component={ReportsPage} />
                     <Route path="users" component={UsersPage} />
