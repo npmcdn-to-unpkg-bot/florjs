@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>React! React! React!</title>
+    <script src="https://fb.me/react-15.1.0.js"></script>
+    <script src="https://fb.me/react-dom-15.1.0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script src="https://npmcdn.com/react-router@2.4.0/umd/ReactRouter.min.js"></script>
+    <link type="text/css" href="styles.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div id="app">
+
+    </div>
+
+    <script type="text/babel">
+
+        var collectionData =[
+
+                    {"approvedStatus":true,"publishComplete":false,"isEncrypted":false,"collectionOwner":"PUBLISHING_SUPPORT","timeseriesImportFiles":[],"id":"collection-1cf384b6318228f7a7796ab6e7c3c82ca40129b76431fe8011d217ef95846ec5","name":"Collection","type":"manual","teams":[]},
+                    {"approvedStatus":false,"publishComplete":false,"isEncrypted":false,"collectionOwner":"PUBLISHING_SUPPORT","timeseriesImportFiles":[],"id":"crispinstestcollection-70ae1f7b0606cff5271afa28dd744aa89604fef5c2a6dca3d061837cde478161","name":"Crispins test collection","type":"manual","teams":[]},
+                    {"approvedStatus":false,"publishComplete":false,"isEncrypted":false,"collectionOwner":"PUBLISHING_SUPPORT","timeseriesImportFiles":[],"id":"testchangename-03ee03fb9862ebda78f396da21cf16f36cc915b86ef6c54272cba9f66db3da7b","name":"I changed this again","type":"manual","teams":[]},
+                    {"approvedStatus":false,"publishComplete":false,"isEncrypted":false,"collectionOwner":"PUBLISHING_SUPPORT","timeseriesImportFiles":[],"id":"newcollection-c147e1cba4f4043bc7b0c2567b8aa842a1b085e7b208f7e13e1fd07e57d6fe2e","name":"New collection","type":"manual","teams":[]}
+                ];
+
+
+
+        var { Router,
+                Route,
+                IndexRoute,
+                IndexLink,
+                Link,
+                auth } = ReactRouter;
+
+        var CollectionList = React.createClass ({
+            render: function() {
+                var createCollectionRow = function(collections) {
+                    return (
+                        <tr key={collections.id}>
+                            <td>{collections.name}</td>
+                            <td>{collections.publishDate}</td>
+                        </tr>
+                    );
+                };
+                return (
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Collection name</th>
+                                <th>Collection date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.props.collections.map(createCollectionRow, this)}
+                        </tbody>
+                    </table>
+                );
+            }
+        });
+
+        var CollectionsPage = React.createClass({
+            getInitialState: function() {
+                return {
+                    collections: collectionData
+                }
+            },
+            render: function() {
+                return (
+                        <div>
+                            <h1>Select a collection</h1>
+                            <CollectionList collections={this.state.collections}/>
+                        </div>
+                );
+            }
+        });
+
+        var PublishingQueuePage = React.createClass({
+            render: function() {
+                return (
+                        <div>
+                            <h1>Select a publish</h1>
+                        </div>
+                );
+            }
+        });
+
+        var ReportsPage = React.createClass({
+            render: function() {
+                return (
+                        <div>
+                            <h1>Select a report</h1>
+                        </div>
+                );
+            }
+        });
+
+        var UsersPage = React.createClass({
+            render: function() {
+                return (
+                        <div>
+                            <h1>Select a user</h1>
+                        </div>
+                );
+            }
+        });
+
+        var TeamsPage = React.createClass({
+            render: function() {
+                return (
+                        <div>
+                            <h1>Select a team</h1>
+                        </div>
+                );
+            }
+        });
+
+        var Nav = React.createClass({
+            render: function() {
+                var floGlobalNav = this.props.loggedIn ? (
+                        <div className="nav">
+                            <ul className="nav--menu">
+                                <li className="nav--menu__item nav--menu__item--collections selected"><a href="#collections">Collections</a></li>
+                                <li className="nav--menu__item nav--menu__item--publish"><a href="#publishingQueue">Publishing queue</a></li>
+                                <li className="nav--menu__item nav--menu__item--reports"><a href="#reports">Reports</a></li>
+                                <li className="nav--menu__item nav--menu__item--users"><a href="#users">Users and access</a></li>
+                                <li className="nav--menu__item nav--menu__item--teams"><a href="#teams">Teams</a></li>
+                                <li className="nav--menu__item nav--menu__item--logout"><a href="#">Logout</a></li>
+                            </ul>
+                        </div> ) : (
+                        <div className="nav">
+                            <p>Flo - made with love.<img src="../app/img/flo.gif" height="32px" /></p>
+                        </div>
+                );
+                return (
+                        <div>
+                            {floGlobalNav}
+                        </div>
+                );
+
+
+
+            }
+        });
+
+        var App = React.createClass({
+            getInitialState() {
+                return {
+                    loggedIn: auth.loggedIn()
+                }
+            },
+
+            updateAuth(loggedIn) {
+                this.setState({
+                    loggedIn
+                })
+            },
+            render: function() {
+                return (
+                    <div>
+                        <Nav loggedIn="true"/>
+                        <div className="content">
+                            {this.props.children}
+                        </div>
+                    </div>
+                )
+            }
+        });
+
+
+        var destination = document.querySelector("#app");
+
+        ReactDOM.render(
+            <Router>
+                <Route path="/" component={App}>
+                    <IndexRoute component={CollectionsPage}/>
+                    <Route path="collections" component={CollectionsPage} />
+                    <Route path="publishingQueue" component={PublishingQueuePage} />
+                    <Route path="reports" component={ReportsPage} />
+                    <Route path="users" component={UsersPage} />
+                    <Route path="teams" component={TeamsPage} />
+                </Route>
+            </Router>,
+            destination
+        );
+
+    </script>
+
+
+
+</body>
+</html>
