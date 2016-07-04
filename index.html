@@ -144,17 +144,6 @@
         });
 
         var App = React.createClass({
-            getInitialState() {
-                return {
-                    loggedIn: auth.loggedIn()
-                }
-            },
-
-            updateAuth(loggedIn) {
-                this.setState({
-                    loggedIn
-                })
-            },
             render: function() {
                 return (
                     <div>
