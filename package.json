@@ -1,0 +1,7 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "scripts": {"server": "http-server -p 9000 --cors"},
+  "devDependencies": { "http-server": "latest" }
+
+}
