@@ -37,9 +37,10 @@
             render: function() {
                 if (this.props.params.id) {
                     var collectionId = this.props.params.id;
+                    collectionId = collectionId.substring(3);
+                    console.log('collectionId: ' + collectionId);
 
                     function findCollection(collection) {
-                        collectionId = collectionId.substring(3);
                         return collection.id === collectionId;
                     }
 
